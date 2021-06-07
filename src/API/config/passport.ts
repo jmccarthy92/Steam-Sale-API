@@ -1,11 +1,11 @@
-import UserService from '@Business/services/User';
+import { UserService } from '@Business/services';
 import { hashPassword } from '@Core/shared/auth';
 import * as PassportJS from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 
 export default class Passport {
 
-    private static setUp(){
+    public static setUp(){
         const userService = new UserService();
         PassportJS.use(
             new LocalStrategy(

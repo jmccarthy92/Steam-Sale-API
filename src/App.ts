@@ -5,13 +5,14 @@ import Knex from 'knex';
 import { Model } from 'objection';
 import helmet from 'helmet';
 
-import express, { Request, Response, NextFunction } from 'express';
-import { BAD_REQUEST } from 'http-status-codes';
+import express, { Request, Response } from 'express';
+import { INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import 'express-async-errors';
 import { HttpError } from '@Core/shared/httpError';
 
 import BaseRouter from '@API/routes';
 import logger from '@Core/shared/Logger';
+import Passport from '@API/config/passport';
 
 class App {
   public app: express.Application = express();
@@ -23,11 +24,15 @@ class App {
   }
  
   private expressInit(): void {
+    // app level middleware
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
     this.expressEnvironemntInit();
+    Passport.setUp();
+    // routes
     this.initializeRouter();
+    // error handler middleware
     this.setUpErrorHandler();
   }
 
@@ -46,7 +51,7 @@ class App {
   private setUpErrorHandler(): void {
     this.app.use(
       (err: HttpError, _: Request, res: Response,) => {
-        const status = err.status || 500;
+        const status = err.status || INTERNAL_SERVER_ERROR;
         const message = err.message || 'Something went wrong';
         logger.error(err.message, err);
         return res.status(status).json({

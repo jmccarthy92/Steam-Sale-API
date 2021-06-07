@@ -2,7 +2,7 @@
 import { Router } from 'express';
 
 // Local Depdendencies
-import { GameRouter } from './game';
+import { GameRouter } from '@API/routes/game';
 import { SwaggerRouter } from '@API/routes/swagger';
 
 class BaseRouter {

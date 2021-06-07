@@ -1,5 +1,8 @@
-import { Router } from 'express';
-import { UserController } from '@API/controllers/user';
+import { Router } from "express";
+import { UserController } from "@API/controllers/user";
+import { Authentication } from "@Core/shared/auth";
+import { userCanAccessEntity, userValidations, validate } from "@API/validations";
+import { UserGameRouter } from "@API/routes/userGame";
 
 export class UserRouter {
   private userController: UserController;
@@ -11,62 +14,85 @@ export class UserRouter {
   public init(): Router {
     const router: Router = Router();
 
-    /**
-    * @swagger
-    *
-    * /user:
-    *   get:
-    *     summary: Gets user saved
-    *     produces:
-    *       - application/json
-    *     parameters:
-    *       - in: query
-    *         name: fields
-    *         schema:
-    *           type: array
-    *           items:
-    *             type: string
-    *       - in: query
-    *         name: orderBY
-    *         schema:
-    *           type: string
-    *     responses:
-    *       200:
-    *         description: "User."
-    *         content:
-    *           application/json:
-    *             schema:
-    *               $ref: '#/components/schemas/User'
-    */    
     router
-      .route('/auth')
-      .get(this.userController.login);
+      .route("/auth")
+      /**
+      * @swagger
+      *
+      * /user/auth:
+      *   get:
+      *     summary: Logs in user
+      *     produces:
+      *       - application/json
+      *     parameters:
+      *       - in: query
+      *         name: email
+      *         required: true
+      *         type: string
+      *       - in: query
+      *         name: password
+      *         required: true
+      *         type: string
+      *     responses:
+      *       200:
+      *         description: "Logged-in User."
+      *         content:
+      *           application/json:
+      *             schema:
+      *               $ref: '#/components/schemas/User'
+      */
+      .post(userValidations, validate, this.userController.login);
 
-    /**
-    * @swagger
-    *
-    * /user:
-    *   post:
-    *     summary: Create user 
-    *     produces:
-    *       - application/json
-    *     requestBody:
-    *       required: true
-    *       content:
-    *         application/json:
-    *           schema:
-    *             $ref: '#/components/schemas/User'
-    *     responses:
-    *       200:
-    *         description: "User."
-    *         content:
-    *           application/json:
-    *             schema:
-    *               $ref: '#/components/schemas/User'
-    */  
+    
     router
-      .route('/')
-      .post(this.userController.create);
+      .route("/")
+      /**
+      * @swagger
+      *
+      * /user:
+      *   post:
+      *     summary: Create user
+      *     produces:
+      *       - application/json
+      *     requestBody:
+      *       required: true
+      *       content:
+      *         application/json:
+      *           schema:
+      *             $ref: '#/components/schemas/User'
+      *     responses:
+      *       200:
+      *         description: "User."
+      *         content:
+      *           application/json:
+      *             schema:
+      *               $ref: '#/components/schemas/User'
+      */
+      .post(userValidations, validate, this.userController.create);
+
+    
+    router
+      .route("/:userId")
+      /**
+      * @swagger
+      *
+      * /user/{userId}:
+      *   delete:
+      *     summary: Removes user.
+      *     produces:
+      *       - application/json
+      *     parameters:
+      *       - in: path
+      *         name: userId
+      *         type: integer
+      *         required: true
+      *     responses:
+      *       200:
+      *         description: "User removed from system."
+      */
+      .delete(Authentication.required, userCanAccessEntity, this.userController.delete);
+
+    router.use('/:userId/game', userCanAccessEntity, new UserGameRouter().init())
 
     return router;
   }

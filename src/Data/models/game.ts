@@ -1,6 +1,5 @@
 import { Model } from 'objection';
 /* eslint-disable @typescript-eslint/no-var-requires */
-Model.query
 
 export class UserGame extends Model {
     public user_id!: number;
@@ -39,6 +38,12 @@ export class UserGame extends Model {
 }
 
 export class SalesInfo extends Model {
+    public game_id!: number;
+    public initial!: number;
+    public final!: number;
+    public discount!: number;
+    public date_updated!: Date;
+
     public static get tableName(): string {
         return 'sales_info';
     }
@@ -61,6 +66,12 @@ export class SalesInfo extends Model {
 
 
 export class Game extends Model {
+    public app_id!: string;
+    public name!: string;
+    public thumbnail!: string;
+    public summary!: string;
+    public raw!: Record<string, any>;
+
     public static get tableName(): string {
         return 'game';
     }
