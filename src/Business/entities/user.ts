@@ -1,9 +1,6 @@
-export interface IToken {
-    id?: number | string;
-    user_id: number | string;
-    token: string;
-    expiration_date?: Date;
-}
+import { IPassword } from "@Data/models/password";
+import { IToken } from "@Data/models/token";
+import { IUser } from "@Data/models/user";
 
 /**
  * @swagger
@@ -35,14 +32,6 @@ export interface IToken {
         this.token = token.token;
         this.expiration_date = token.expiration_date;
     }
-}
-
-export interface IPassword {
-    id?: number | string;
-    user_id: number | string;
-    salt: string;
-    hash: string;
-    date_created: Date;
 }
 
 /**
@@ -79,15 +68,6 @@ export interface IPassword {
     }
 }
 
-
-export interface IUser {
-    id?: number | string;
-    email: string;
-    token?: Token;
-    password?: Password;
-}
-
-
 /**
  * @swagger
  * components:
@@ -106,8 +86,8 @@ export interface IUser {
 export class User implements IUser {
     public id?: string;
     public email: string;
-    public token?: Token;
-    public password?: Password;
+    public token?: IToken;
+    public password?: IPassword;
 
     public constructor(user: IUser) {
         this.id = user.id ? String(user.id) : undefined;

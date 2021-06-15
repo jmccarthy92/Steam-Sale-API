@@ -37,7 +37,15 @@ export class UserGame extends Model {
     }
 }
 
-export class SalesInfo extends Model {
+export interface ISalesInfo {
+    game_id?: number;
+    initial: number;
+    final: number;
+    discount: number;
+    date_updated: Date;
+}
+
+export class SalesInfo extends Model implements ISalesInfo {
     public game_id!: number;
     public initial!: number;
     public final!: number;
@@ -64,11 +72,21 @@ export class SalesInfo extends Model {
     }
 }
 
+export interface IGame {
+    id?: number | string;
+    app_id: string;
+    name: string;
+    thumbnail_url: string;
+    summary: string;
+    raw: Record<string, any>;
+    sales_info?: Partial<ISalesInfo>;
+}
 
-export class Game extends Model {
+export class Game extends Model implements IGame {
+    public id?: number | string;
     public app_id!: string;
     public name!: string;
-    public thumbnail!: string;
+    public thumbnail_url!: string;
     public summary!: string;
     public raw!: Record<string, any>;
 
@@ -84,7 +102,7 @@ export class Game extends Model {
                 id: { type: 'number' },
                 app_id: { type: 'string', maxLength: 255},
                 name: { type: 'string', maxLength: 255},
-                thumbnail: { type: 'string', maxLength: 1000 },
+                thumbnail_url: { type: 'string', maxLength: 1000 },
                 summary: { type: 'string', maxLength: 10000},
                 raw: { type: 'object'},
             },

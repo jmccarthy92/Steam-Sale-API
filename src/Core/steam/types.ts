@@ -19,6 +19,8 @@ export interface IGameDetailResponse {
    }
 }
 
+export type IGameDetails = IGameDetail[];
+
 export interface IGameDetail {
     type?: string;
     name?: string;

@@ -1,7 +1,15 @@
 import { Model } from 'objection';
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-export class Password extends Model {
+export interface IPassword {
+    id?: number | string;
+    user_id: number | string;
+    salt: string;
+    hash: string;
+    date_created: Date;
+}
+
+export class Password extends Model implements IPassword {
     public id?: number | string;
     public user_id!: number | string;
     public salt!: string;

@@ -1,7 +1,15 @@
 import { Model } from 'objection';
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-export class Token extends Model {
+export interface IToken {
+    id?: number | string;
+    user_id: number | string;
+    token: string;
+    expiration_date?: Date;
+}
+
+
+export class Token extends Model implements IToken {
     public id?: number | string;
     public user_id!: number | string;
     public token!: string;

@@ -1,7 +1,21 @@
+import { IPassword, Password } from '@Data/models/password';
+import { IToken, Token } from '@Data/models/token';
 import { Model } from 'objection';
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-export class User extends Model {
+export interface IUser {
+    id?: number | string;
+    email: string;
+    token?: IToken;
+    password?: IPassword;
+}
+
+export class User extends Model implements IUser {
+    public id?: number | string;
+    public email!: string
+    public token?: Token;
+    public password?: Password;
+
     public static get tableName(): string {
         return 'user';
     }

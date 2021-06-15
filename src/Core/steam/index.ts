@@ -1,5 +1,5 @@
 import request from 'request-promise';
-import { IApp, IAppListResponse, IGameDetail, IGameDetailResponse, IPriceOverview } from './types';
+import { IApp, IAppListResponse, IGameDetail, IGameDetailResponse, IGameDetails, IPriceOverview } from './types';
 
 export class SteamWebAPI {
     private static readonly STEAM_API_URL = 'https://api.steampowered.com';
@@ -21,7 +21,7 @@ export class SteamWebAPI {
         return  `${SteamWebAPI.STEAM_API_URL}/${SteamWebAPI.STEAM_APPS_INTERFACE}/${endpoint}/${SteamWebAPI.STEAM_API_VERSION}/`
     }
 
-    public static async getGameDetails(appIds: number[]): Promise<IGameDetail[]> {
+    public static async getGameDetails(appIds: number[]): Promise<IGameDetails> {
         const promises = appIds.map(this.getGameDetail);
         const response = await Promise.all(promises);
         return response.filter((res) => Boolean(res));

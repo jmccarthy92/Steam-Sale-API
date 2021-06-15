@@ -18,7 +18,7 @@ export default class UserGameService extends Service<UserGame> {
     const { orderBy = "id", page = 1, pageSize = 100 } = queryOption;
     const result = await this.get(fields)
       .where("user_id", userId)
-      .withGraphFetched("games")
+      .withGraphFetched("games.sales_info")
       .orderBy(orderBy)
       .page(page, pageSize);
     return mapGames(result.results);
@@ -27,7 +27,7 @@ export default class UserGameService extends Service<UserGame> {
   public async getUserGames(userId: number | string, fields: string[] = [this.SELECT_ALL]): Promise<GameEntity[]> {
     const userGames = await this.get(fields)
       .where("user_id", userId)
-      .withGraphFetched("games");
+      .withGraphFetched("games.sales_info");
     return mapGames(userGames);
   }
 

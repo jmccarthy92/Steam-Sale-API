@@ -4,9 +4,7 @@ require('ts-node/register');
 module.exports = {
 
     client: "pg",
-    connection:
-    // process.env.SQL_URL, //||
-    'postgres://localhost:5432/steam_sale_app',
+    connection: process.env.SQL_URL,
     pool: {
       min: 0,
       max: 10
